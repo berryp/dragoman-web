@@ -1,0 +1,80 @@
+body {
+    margin-top: 40px;
+    background: url(../img/dragoman.jpg) right bottom no-repeat;
+}
+
+.wrapper {
+    background: #fff;
+}
+
+.home-banner {
+    background: url(../img/dragoman_bg.jpg) center -150px no-repeat;
+    color: #fff;
+}
+
+.catalogs .nav-stacked a button {
+    float: right;
+}
+
+.phrases table tbody {
+    display: block;
+    height: 400px;
+    overflow: auto;
+    width: 100%;
+}
+
+.phrases table tfoot {
+    border-top: solid 1px #ccc;
+    display: block;
+    width: 100%;
+    padding-top: 10px;
+    background: #ffffcc;
+}
+
+.phrases table tfoot tr {
+    display: block;
+    width: 100%;
+}
+
+.phrases table tfoot td {
+    border: none;
+}
+
+.phrases table td {
+    width: 450px;
+}
+
+.phrases table tr:hover,
+.phrases table tr label:hover {
+    cursor: pointer;
+}
+
+.phrases .optionsBar {
+    text-align: center;
+    padding: 10px 10px 10px 10px;
+}
+
+.phrases textarea {
+    width: 90%;
+}
+.phrases .control-label {
+    text-align: left;
+}
+.phrases .control-label {
+    width: 50%;
+}
+
+.new-phrase textarea {
+    width: 40%;
+}
+.new-phrase .translation {
+    float: right;
+}
+
+.fileDrop {
+    padding: 30px 30px 30px 30px;
+    color: #fff;
+    text-align: center;
+    font-size: 3em;
+    background: green;
+}

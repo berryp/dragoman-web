@@ -1,0 +1,67 @@
+
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Catalogs</h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12 catalogs">
+        <ul class="nav nav-pills nav-stacked catalogs">
+            <li ng-repeat="catalog in catalogs">
+                <a href="#/catalogs/{{catalog.id}}/">
+                    {{catalog.name}} - {{catalog.desc}}
+                    <button class="close .pull-right"><i class="icon-trash"></i></button>
+                </a>
+
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="span12">
+        <form action="/language" method="POST" name="create_language">
+            <legend>Create new language abbreviation</legend>
+            <label for="new_abbrev">Abbreviation</label>
+            <input type="text" name="abbrev" />
+            <label for="new_name">Langauge Name</label>
+            <input type="text" name="name" />
+            <button type="submit" name="submit" class="btn">Create</button>
+        </form>
+    </div>
+</div>
+
+<div class="form_block">
+  <form action="/catalog" method="POST" name="create_catalog">
+    <input type="hidden" name="action" value="create" />
+    <label for="catalog">New Catalog Name</label>
+    <input type="text" name="catalog" />
+    <input type="submit" name="submit" value="create" />
+  </form>
+</div>
+
+<div class="form_block">
+  <h5>Existing Catalogs</h5>
+  <table class="edit_catalogs">
+    <tr>
+      <th>Catalog Name</th>
+      <th>Actions</th>
+    </tr>
+    % for catalog in catalogs:
+    <tr>
+      <td class="catalog_edit_name">
+    <a class="catalog_edit" href="#/catalogs/${catalog}">${catalog}</a>
+      </td>
+      <td class="actions">
+    <form action="/catalog" method="POST" name="delete_catalog">
+      <input type="hidden" name="action" value="delete" />
+      <input type="hidden" name="catalog" value="${catalog}" />
+      <a class="submit_link">delete</a>
+    </form>
+      </td>
+    </tr>
+    % endfor
+  </table>
+</div>

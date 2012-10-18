@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Catalogs <small>{{catalog.name}}</small></h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li ng-class="{active: languageCode == null}"><a href="javascript:void(0);">Overview</a></li>
+                <li ng-class="{active: code == languageCode}" ng-repeat="(code, language) in catalog.languages">
+                    <a href="#/catalogs/{{catalog.id}}/{{code}}">{{language.name}}</a>
+                </li>
+                <li><a data-target="#importPofileModal" show-modal role="button" data-toggle="modal">Import PO file</a>
+                <li><a data-target="#addLanguageModal" show-modal role="button" data-toggle="modal">Add language</a>
+            </ul>
+        </div>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab=${langcode}">
+                <form action="/catalog/${catalog}/${lang}" method="POST" class="form-horizontal">
+                    <legend>Phrases</legend>
+                    <div class="phrases">
+                        <table class="table table-hover table-striped table-condensed">
+                            <thead>
+                            </thead>
+                            <tbody>
+                                <tr ng-class="{warning: message.msgstr == ''}" ng-repeat="message in messages" ng-click="editMessage(message);">
+                                    <td>
+                                        {{message.msgid}}
+                                    </td>
+                                    <td>
+                                        {{message.msgstr[0]}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr><td>English</td><td>{{language.name}}</td>
+                                <tr>
+                                    <td>
+                                        <textarea ng-model="message.msgid" rows="2"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea ng-model="message.msgstr" rows="2"></textarea>
+                                    </td>
+                                </tr>
+                                <tr><td>References</td><td>Comments</td></tr>
+                                <tr>
+                                    <td>
+                                        <textarea ng-model="message.references" rows="2"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea ng-model="message.comments" rows="2"></textarea>
+                                    </td>
+                                </tr>
+                                <tr colspan="2">
+                                    <td>
+                                        <div class="optionsBar">
+                                            <button class="btn btn-info" ng-click="saveMessage();">Save</buton>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div ng-include="'partials/new-catalog-modal.html'"></div>
+<div ng-include="'partials/import-pofile-modal.html'"></div>

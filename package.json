@@ -1,0 +1,17 @@
+{
+    "name": "dragoman-web",
+    "description": "The web interface for the Dragoman translaiton API. A simple version of the API is built-in to this app.",
+    "version": "0.0.1",
+    "author": "Berry Phillips <berryphillips@gmail.com>",
+    "dependencies": {
+        "express": ">=3.0.0rc5",
+        "mongodb": ">=1.1.11",
+        "node-po": ">=0.1.2"
+    },
+    "scripts": {
+        "start": "node server"
+    },
+    "engines": {
+        "node": ">=0.8.8"
+    }
+}
