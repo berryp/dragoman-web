@@ -22,6 +22,28 @@ var messageProvider = getProvider('MessageProvider');
 
 app.use(express.static(__dirname + '/app'));
 app.use(express.bodyParser()); app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(express.session({ secret: "keyboard cat" }));
+// app.use(function(req, res, next){
+//   if (!isAuthenticated(req)) {
+//     console.log('401');
+//     res.statusCode = 401;
+//   }
+//   next();
+// });
+
+
+function authenticate(username, password, error, success) {
+  if (username === 'berryp' && password === 'password') {
+    success();
+    return;
+  }
+  error();
+}
+
+function isAuthenticated(req) {
+  return req.session.user !== undefined;
+}
 
 app.get('/', function (req, res) {
   res.send(indexTemplate);
@@ -68,8 +90,27 @@ app.post('/catalogs/:catalogId/import', function (req, res) {
 });
 
 app.get('/catalogs/:catalogId/messages/:languageCode', function (req, res) {
-  messageProvider.findAll(req.params.catalogId, req.params.languageCode, function (error, messages) {
-    res.send(messages);
+  console.log(req.path, req.params);
+  messageProvider.findAll(req.params.catalogId, req.params.languageCode,
+    function (error, messages) {
+      res.send(messages);
+    }
+  );
+});
+
+app.get('/catalogs/:catalogId/messages/:languageCode/:msgid', function (req, res) {
+  console.log(req.path, req.params);
+  messageProvider.findOne(req.params.catalogId, req.params.languageCode, {msgid: req.params.msgid},
+    function (error, message) {
+      res.send(message);
+    }
+  );
+});
+
+app.post('/catalogs/:catalogId/messages/:languageCode/:msgid', function (req, res) {
+  console.log(req.path, req.params);
+  messageProvider.save(req.params.catalogId, req.params.languageCode, req.body, function (error, message) {
+    res.send(message);
   });
 });
 

@@ -1,0 +1,67 @@
+<div class="phrases" ng-class="{loading: loading}">
+    <div ng-show="loading" class="loadingModal"></div>​
+    <table class="table table-hover table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>English</th>
+                <th>{{language.name}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-class="{warning: message.msgstr == '', error: message.dirty}" ng-repeat="message in messages | filter:filterByMessageState | filter:filterByText" ng-click="editMessage(message);">
+                <td>
+                    <span ng-hide="false">{{message.msgid}}</span>
+                    <div ng-show="false">
+                        <textarea ng-readonly="!advanced_edit" ng-model="message.msgid" rows="2" ng-change="change(message)"></textarea>
+                        <textarea ng-readonly="!advanced_edit" ng-show="message.msgid_plural" ng-model="message.msgid_plural" rows="2" ng-change="change(message)"></textarea>
+                    </div>
+                </td>
+                <td>
+                    {{message.msgstr[0]}}
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+        </tbody>
+        <tfoot ng-show="message">
+            <tr>
+                <td>
+                    <textarea ng-readonly="!advanced_edit" ng-model="message.msgid" rows="2" ng-change="change(message)"></textarea>
+                    <textarea ng-readonly="!advanced_edit" ng-show="message.msgid_plural" ng-model="message.msgid_plural" rows="2" ng-change="change(message)"></textarea>
+                </td>
+                <td>
+                    <textarea ng-model="message.msgstr[0]" rows="2" ng-change="change(message)"></textarea>
+                    <textarea ng-show="message.msgstr[1]" ng-model="message.msgstr[1]" rows="2" ng-change="change(message)"></textarea>
+                </td>
+            </tr>
+            <tr ng-show="message.msgid.length == 2">
+                <td>
+                    <textarea ng-model="message.plural" rows="2" ng-change="change(message)"></textarea>
+                </td>
+                <td>
+                    <textarea ng-model="message.msgid[1]" rows="2"></textarea>
+                </td>
+            </tr>
+            <tr><td>References</td><td>Comments</td></tr>
+            <tr>
+                <td>
+                    <textarea ng-readonly="!advanced_edit" ng-model="message.references" rows="2" ng-change="change(message)"></textarea>
+                </td>
+                <td>
+                    <textarea ng-model="message.comments" rows="2" ng-change="change(message)"></textarea>
+                </td>
+            </tr>
+            <tr colspan="2">
+                <td>
+                    <div class="form-inline">
+                        <button class="btn btn-info" type="submit" ng-click="submit()">Save</button>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="message.fuzzy"> Fuzzy
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

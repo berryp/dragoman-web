@@ -11,7 +11,7 @@
 
         <div class="tabbable">
             <ul class="nav nav-tabs">
-                <li ng-class="{active: languageCode == null}"><a href="javascript:void(0);">Overview</a></li>
+                <li ng-class="{active: languageCode == null}"><a ng-href="/catalogs/{{catalog.id}}">Overview</a></li>
                 <li ng-class="{active: code == languageCode}" ng-repeat="(code, language) in catalog.languages">
                     <a href="#/catalogs/{{catalog.id}}/{{code}}">{{language.name}}</a>
                 </li>
@@ -21,58 +21,42 @@
         </div>
 
         <div class="tab-content">
-            <div class="tab-pane active" id="tab=${langcode}">
-                <form action="/catalog/${catalog}/${lang}" method="POST" class="form-horizontal">
-                    <legend>Phrases</legend>
-                    <div class="phrases">
-                        <table class="table table-hover table-striped table-condensed">
-                            <thead>
-                            </thead>
-                            <tbody>
-                                <tr ng-class="{warning: message.msgstr == ''}" ng-repeat="message in messages" ng-click="editMessage(message);">
-                                    <td>
-                                        {{message.msgid}}
-                                    </td>
-                                    <td>
-                                        {{message.msgstr[0]}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr><td>English</td><td>{{language.name}}</td>
-                                <tr>
-                                    <td>
-                                        <textarea ng-model="message.msgid" rows="2"></textarea>
-                                    </td>
-                                    <td>
-                                        <textarea ng-model="message.msgstr" rows="2"></textarea>
-                                    </td>
-                                </tr>
-                                <tr><td>References</td><td>Comments</td></tr>
-                                <tr>
-                                    <td>
-                                        <textarea ng-model="message.references" rows="2"></textarea>
-                                    </td>
-                                    <td>
-                                        <textarea ng-model="message.comments" rows="2"></textarea>
-                                    </td>
-                                </tr>
-                                <tr colspan="2">
-                                    <td>
-                                        <div class="optionsBar">
-                                            <button class="btn btn-info" ng-click="saveMessage();">Save</buton>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+            <div class="tab-pane" ng-class="{active: !languageCode}">
+                <div class="well">
+                    <h4 ng-show="catalog.description != ''">{{catalog.description}}</h4>
+                    <p>Total messages:</p>
+                    <p>Untranslated:</p>
+                    <p>Fuzzy:</p>
+                </div>
+                <span>
+            </div>
+
+            <div class="tab-pane" ng-class="{active: languageCode}">
+                <form class="form-horizontal">
+                    <legend>
+                        Messages
+                        <div class="form-search pull-right">
+                            <div class="input-append">
+                                <input type="text" class="span2 search-query" placeholder="Search" ng-model="searchMsgStr">
+                                <button type="submit" ng-disabled="searchMsgStr" class="btn" ng-click="clearSearch()"><b class="icon-remove"></b></button>
+                            </div>
+                        </div>
+                    </legend>
+
+                    <div class="pull-right">
+                        <div class="btn-group pull-right" data-toggle="buttons-radio">
+                            <button type="button" ng-class="{active: messagesState == 0}" ng-click="setMessagesState(0)" class="btn">All</button>
+                            <button type="button" ng-class="{active: messagesState == 1}" ng-click="setMessagesState(1)" class="btn">Untranslated</button>
+                            <button type="button" ng-class="{active: messagesState == 2}" ng-click="setMessagesState(2)" class="btn">Fuzzy</button>
+                        </div>
                     </div>
+
+                    <div ng-include="'partials/message-list.html'"></div>
                 </form>
             </div>
         </div>
-
     </div>
 </div>
 
-<div ng-include="'partials/new-catalog-modal.html'"></div>
-<div ng-include="'partials/import-pofile-modal.html'"></div>
+<div ng-cloak ng-include="'partials/new-catalog-modal.html'"></div>
+<div ng-cloak ng-include="'partials/import-pofile-modal.html'"></div>

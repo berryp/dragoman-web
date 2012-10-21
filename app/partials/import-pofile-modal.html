@@ -7,14 +7,14 @@
     <div class="modal-body">
         <div class="form-horizontal">
             <div class="control-group">
-                <label class="control-label" for="languageCode" ng-model="languageCode">Language</label>
+                <label class="control-label" for="languageCode" ng-model="pofileLanguageCode">Language</label>
                 <div class="controls">
-                    <select ng-model="languageCode" ng-options="k as v for (k, v) in languageList" ng-change="change()"></select>
+                    <select ng-model="pofileLanguageCode" ng-options="k as v for (k, v) in pofileLanguageList" ng-change="change()"></select>
                 </div>
             </div>
         </div>
         <div class="fileDropContainer" style="display: none;">
-            <div id="fileDrop" class="fileDrop" style="display: none;">Drop file here</div>
+            <div id="fileDrop" class="fileDrop well" style="display: none;"><h3>Drop file here...</3></div>
             <div class="progress progress-striped" style="display: none;">
                 <div class="bar" style="width: 0%;"></div>
             </div>

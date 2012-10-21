@@ -55,24 +55,18 @@ CatalogProvider.prototype.findOne = function (query, callback) {
   });
 };
 
-CatalogProvider.prototype.save = function (catalogs, callback) {
+CatalogProvider.prototype.save = function (catalog, callback) {
   this.getCollection(function(error, catalog_collection) {
     if (error) {
       callback(error);
       return;
     }
 
-    if (typeof catalogs.length === "undefined") {
-      catalogs = [catalogs];
-    }
+    catalog._id = new ObjectID(catalog._id);
+    catalog.languages = catalog.languages || [];
 
-    for (var i = 0; i < catalogs.length; i++) {
-      catalog = catalogs[i];
-      catalog.languages = catalog.languages || [];
-    }
-
-    catalog_collection.insert(catalogs, function() {
-      callback(null, catalogs);
+    catalog_collection.save(catalog, function() {
+      callback(null, catalog);
     });
   });
 };
@@ -110,19 +104,35 @@ MessageProvider.prototype.findAll = function (catalogId, languageCode, callback)
   });
 };
 
-MessageProvider.prototype.save = function (catalogId, languageCode, messages, callback) {
+MessageProvider.prototype.findOne = function (catalogId, languageCode, query, callback) {
   this.getCollection(catalogId, languageCode, function(error, message_collection) {
     if (error) {
       callback(error);
       return;
     }
 
-    if (typeof messages.length === "undefined") {
-      messages = [messages];
+    message_collection.findOne(query, function(error, result) {
+      if (error) {
+        callback(error);
+        return;
+      }
+
+      callback(null, result);
+    });
+  });
+};
+
+MessageProvider.prototype.save = function (catalogId, languageCode, message, callback) {
+  this.getCollection(catalogId, languageCode, function(error, message_collection) {
+    if (error) {
+      callback(error);
+      return;
     }
 
-    message_collection.insert(messages, function() {
-      callback(null, messages);
+    message._id = new ObjectID(message._id);
+
+    message_collection.save(message, function() {
+      callback(null, message);
     });
   });
 };

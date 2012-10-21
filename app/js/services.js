@@ -5,7 +5,10 @@ Dragoman.
         return $resource('/catalogs/:catalogId', {});
     }).
     factory('Message', function($resource, $routeParams) {
-        return $resource('/catalogs/:catalogId/messages/:languageCode/:messageId', {
+        var Message = $resource('/catalogs/:catalogId/messages/:languageCode/:msgid', {
             catalogId: $routeParams.catalogId, languageCode: $routeParams.languageCode
+            }, {
         });
+
+        return Message;
     });
