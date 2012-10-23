@@ -1,67 +1,65 @@
-<div class="phrases" ng-class="{loading: loading}">
+<div class="messageList" ng-class="{loading: loading, editing: editing}">
     <div ng-show="loading" class="loadingModal"></div>​
-    <table class="table table-hover table-striped table-condensed">
-        <thead>
-            <tr>
-                <th>English</th>
-                <th>{{language.name}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-class="{warning: message.msgstr == '', error: message.dirty}" ng-repeat="message in messages | filter:filterByMessageState | filter:filterByText" ng-click="editMessage(message);">
-                <td>
-                    <span ng-hide="false">{{message.msgid}}</span>
-                    <div ng-show="false">
-                        <textarea ng-readonly="!advanced_edit" ng-model="message.msgid" rows="2" ng-change="change(message)"></textarea>
-                        <textarea ng-readonly="!advanced_edit" ng-show="message.msgid_plural" ng-model="message.msgid_plural" rows="2" ng-change="change(message)"></textarea>
-                    </div>
-                </td>
-                <td>
-                    {{message.msgstr[0]}}
-                </td>
-            </tr>
-            <tr>
 
-            </tr>
-        </tbody>
-        <tfoot ng-show="message">
-            <tr>
-                <td>
-                    <textarea ng-readonly="!advanced_edit" ng-model="message.msgid" rows="2" ng-change="change(message)"></textarea>
-                    <textarea ng-readonly="!advanced_edit" ng-show="message.msgid_plural" ng-model="message.msgid_plural" rows="2" ng-change="change(message)"></textarea>
-                </td>
-                <td>
-                    <textarea ng-model="message.msgstr[0]" rows="2" ng-change="change(message)"></textarea>
-                    <textarea ng-show="message.msgstr[1]" ng-model="message.msgstr[1]" rows="2" ng-change="change(message)"></textarea>
-                </td>
-            </tr>
-            <tr ng-show="message.msgid.length == 2">
-                <td>
-                    <textarea ng-model="message.plural" rows="2" ng-change="change(message)"></textarea>
-                </td>
-                <td>
-                    <textarea ng-model="message.msgid[1]" rows="2"></textarea>
-                </td>
-            </tr>
-            <tr><td>References</td><td>Comments</td></tr>
-            <tr>
-                <td>
-                    <textarea ng-readonly="!advanced_edit" ng-model="message.references" rows="2" ng-change="change(message)"></textarea>
-                </td>
-                <td>
-                    <textarea ng-model="message.comments" rows="2" ng-change="change(message)"></textarea>
-                </td>
-            </tr>
-            <tr colspan="2">
-                <td>
-                    <div class="form-inline">
-                        <button class="btn btn-info" type="submit" ng-click="submit()">Save</button>
-                        <label class="checkbox">
-                            <input type="checkbox" ng-model="message.fuzzy"> Fuzzy
+    <div class="row">
+        <div class="span6 messagesCol">
+            <ul class="nav nav-pills nav-stacked">
+                <li ng-repeat="message in messages | filter:filterByText | filter:filterByMessageState"
+                        ng-click="editMessage(message);" ng-class="messageStatusClass(message, 'active', 'inactive')">
+                    <div class="row">
+                        <div class="">
+                            <div class="span0_5">EN</div>
+                            <div class="span5">{{message.msgid}}</div>
+
+                            <div ng-show="message.msgid_plural">
+                                <div class="span0_5"></div>
+                                <div class="span5"><em>{{message.msgid_plural}}</em></a></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div>
+                            <div class="span0_5 text-warning">{{languageCode.toUpperCase()}}</div>
+                            <div class="span5 text-warning">{{message.msgstr[0]}}</div>
+
+                            <div ng-show="message.msgid_plural">
+                                <div class="span0_5"></div>
+                                <div class="span5 text-warning"><em>{{message.msgstr[1]}}</em></a></div>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+                    <hr />
+                </li>
+            </ul>
+        </div>
+        <div class="span6 editMessageCol">
+            <div class="alert alert-info editMessage" ng-show="currentMessage">
+                <!--<a class="close" ng-click="cancelEdit()">&times;</a>-->
+                <form>
+                    <legend>Edit translation</legend>
+                    <label>English</label>
+                    <textarea class="span5" ng-readonly="!advanced_edit" ng-model="currentMessage.msgid" rows="2" ng-change="change(currentMessage)" ng-pristine></textarea>
+                    <textarea class="span5" ng-readonly="!advanced_edit" ng-show="currentMessage.msgid_plural" ng-model="currentMessage.msgid_plural" rows="2" ng-change="change(currentMessage)" ng-pristine></textarea>
+                    <br /><br />
+                    <label>{{language.name}}</label>
+                    <textarea class="span5" ng-model="currentMessage.msgstr[0]" rows="2" ng-change="change(currentMessage)" ng-pristine></textarea>
+                    <textarea class="span5" ng-show="currentMessage.msgstr[1]" ng-model="currentMessage.msgstr[1]" rows="2" ng-change="change(currentMessage)" ng-pristine></textarea>
+                    <hr />
+                    <label>References</label>
+                    <ul class="unstyled" ng-repeat="reference in currentMessage.references">
+                        <li><code>{{reference}}</code></li>
+                    </ul>
+                    <label>Comments</label>
+                    <textarea class="span5" ng-model="currentMessage.comments" rows="2" ng-change="change(currentMessage)" ng-pristine></textarea>
+                    <br /><br />
+                    <label class="checkbox">
+                        <input type="checkbox" ng-model="currentMessage.fuzzy" ng-pristine> Fuzzy
+                    </label>
+                    <hr />
+                    <button class="btn btn-info" type="submit" ng-click="submit()">Save</button>
+                    <a ng-click="cancelEdit();">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

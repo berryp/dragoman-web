@@ -23,68 +23,17 @@ body {
     float: right;
 }
 
-.phrases table thead {
-    border-bottom: solid 1px #ccc;
-    display: block;
-    width: 100%;
-    padding-bottom: 10px;
-}
-
-.phrases table tbody {
-    display: block;
-    height: 400px;
+.messageList .messagesCol {
+    height: 500px;
     overflow: auto;
-    width: 100%;
 }
 
-.phrases table tfoot {
-    border-top: solid 1px #ccc;
-    display: block;
-    width: 100%;
-    padding-top: 10px;
+.messageList .messagesCol hr {
+    margin: 10px 0;
 }
 
-.phrases table thead tr,
-.phrases table tfoot tr {
-    display: block;
-    width: 100%;
-}
-
-.phrases table thead th,
-.phrases table tfoot td {
-    border: none;
-}
-
-.phrases table th,
-.phrases table td {
-    width: 450px;
-}
-
-.phrases table tr:hover,
-.phrases table tr label:hover {
-    cursor: pointer;
-}
-
-.phrases .optionsBar {
-    text-align: center;
-    padding: 10px 10px 10px 10px;
-}
-
-.phrases textarea {
-    width: 90%;
-}
-.phrases .control-label {
-    text-align: left;
-}
-.phrases .control-label {
-    width: 50%;
-}
-
-.new-phrase textarea {
-    width: 40%;
-}
-.new-phrase .translation {
-    float: right;
+.filterButtons {
+    margin-right: 30px;
 }
 
 .fileDrop {
@@ -92,14 +41,21 @@ body {
     color: #999;
 }
 
-
-
-
-.messageRow:hover {
-    background: #ddd;
-    cursor: pointer;
+.extra-muted {
+    color: #ccc;
 }
 
+.messagesCol .active {
+}
+.messagesCol .inactive,
+.messagesCol .inactive .text-info,
+.messagesCol .inactive .text-warning {
+    color: #ccc;
+}
+
+.span0_25 {
+  width: 15px;
+}
 
 .loadingModal {
     display:    none;

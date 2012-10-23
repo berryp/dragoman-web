@@ -36,21 +36,17 @@
                     <legend>
                         Messages
                         <div class="form-search pull-right">
+                            <div class="btn-group filterButtons" data-toggle="buttons-radio">
+                                <button type="button" ng-class="{active: messagesState == 0}" ng-click="setMessagesState(0)" class="btn">All</button>
+                                <button type="button" ng-class="{active: messagesState == 1}" ng-click="setMessagesState(1)" class="btn">Untranslated</button>
+                                <button type="button" ng-class="{active: messagesState == 2}" ng-click="setMessagesState(2)" class="btn">Fuzzy</button>
+                            </div>
                             <div class="input-append">
-                                <input type="text" class="span2 search-query" placeholder="Search" ng-model="searchMsgStr">
+                                <input type="text" class="span2 search-query" placeholder="Search" ng-change="clearEdit()" ng-model="searchMsgStr">
                                 <button type="submit" ng-disabled="searchMsgStr" class="btn" ng-click="clearSearch()"><b class="icon-remove"></b></button>
                             </div>
                         </div>
                     </legend>
-
-                    <div class="pull-right">
-                        <div class="btn-group pull-right" data-toggle="buttons-radio">
-                            <button type="button" ng-class="{active: messagesState == 0}" ng-click="setMessagesState(0)" class="btn">All</button>
-                            <button type="button" ng-class="{active: messagesState == 1}" ng-click="setMessagesState(1)" class="btn">Untranslated</button>
-                            <button type="button" ng-class="{active: messagesState == 2}" ng-click="setMessagesState(2)" class="btn">Fuzzy</button>
-                        </div>
-                    </div>
-
                     <div ng-include="'partials/message-list.html'"></div>
                 </form>
             </div>
