@@ -23,13 +23,14 @@ body {
     float: right;
 }
 
-.messageList .messagesCol {
-    height: 500px;
-    overflow: scroll;
-}
-
-.messageList .messagesCol hr {
-    margin: 10px 0;
+.messageList {
+    .messagesCol {
+        height: 500px;
+        overflow: scroll;
+        hr {
+            margin: 10px 0;
+        }
+    }
 }
 
 .filterButtons {
@@ -45,39 +46,37 @@ body {
     color: #ccc;
 }
 
-.messagesCol li {
-    cursor: pointer;
-}
-
-.messagesCol .active {
-}
-.messagesCol .inactive,
-.messagesCol .inactive .text-info,
-.messagesCol .inactive .text-warning {
-    color: #ccc;
+.messagesCol {
+    li {
+        cursor: pointer;
+    }
+    .inactive,
+    .inactive .text-info,
+    .inactive .text-warning {
+        color: #ccc;
+    }
 }
 
 .span0_25 {
-  width: 15px;
+    width: 15px;
 }
 
 .loadingModal {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     background: rgba( 255, 255, 255, .8 )
-                url('http://sampsonresume.com/labs/pIkfp.gif')
-                50% 50%
-                no-repeat;
+        url('http://sampsonresume.com/labs/pIkfp.gif')
+        50% 50% no-repeat;
 }
 
 .loading .loadingModal {
     display: block;
-}​
+}
 
 .css-form input.ng-invalid.ng-dirty {
     background-color: #FA787E;

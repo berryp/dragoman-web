@@ -14,8 +14,7 @@ dragomanApp.controller.CatalogListCtrl = function($scope, $routeParams, Catalog)
 
 dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routeParams, $location, $filter, Catalog, Message) {
     Catalog.get({catalogId: $routeParams.catalogId}, function (catalog) {
-        $scope.currentPage = 0;
-        $scope.pageSize = 10;
+        $scope.messageStates = [[0, 'All'], [1, 'Untranslated'], [2, 'Fuzzy']];
 
         if ($routeParams.languageCode) {
             $scope.languageCode = $routeParams.languageCode;
@@ -34,22 +33,23 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
         var pofileLanguageList = LANGUAGE_LIST;
         var catalogLangKeys = Object.keys($scope.catalog.languages);
 
-        angular.forEach(catalogLangKeys, function (key) {
+        for (var i = 0; i < catalogLangKeys.length; i++) {
+            var key = catalogLangKeys[i];
             if (pofileLanguageList[key] !== undefined) {
                 delete pofileLanguageList[key];
             }
-        });
+        }
 
         $scope.pofileLanguageList = pofileLanguageList;
         $scope.pofileLanguageCode = '';
     });
 
-    function reset() {
+    $scope.reset = function () {
         delete $scope.editing;
         delete $scope.dirty;
         delete $scope.messageOriginal;
         delete $scope.currentMessage;
-    }
+    };
 
     $scope.setMessagesState = function (stateId) {
         delete $scope.currentMessage;
@@ -85,10 +85,6 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
             return true;
         }
 
-        // if (message.msgstr === undefined) {
-        //     message.msgstr = [''];
-        // }
-
         var searchables = [message.msgid, message.msgstr[0]];
 
         if (message.msgid_plural !== null) {
@@ -98,12 +94,13 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
             }
         }
 
-        angular.forEach(searchables, function (searchable) {
+        for (var i = 0; i < searchables.length; i++) {
+            var searchable = searchables[i];
             searchable = searchable === undefined ? '' : cleanText(searchable);
             if (searchable.search($scope.searchMsgStr.toLowerCase()) !== -1) {
                 return true;
             }
-        });
+        }
 
         return false;
     };
@@ -139,30 +136,29 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
         }
 
         $scope.editing = true;
-        $scope.messageOriginal = angular.copy(message);
+        $scope.messageOriginal = message;
         $scope.currentMessage = angular.copy(message);
     };
 
     $scope.cancelEdit = function () {
         var confirmed = true;
 
-        if ($scope.dirty) {
+        if ($scope.isChanged()) {
             confirmed = confirm("Any changes you have made will be lost.");
         }
 
         if (confirmed) {
-            reset();
+            $scope.reset();
         }
 
         return confirmed;
     };
 
-    $scope.submit = function () {
-        reset();
+    $scope.update = function () {
+        var message = $scope.currentMessage;
 
         $scope.loading = true;
-
-        var message = $scope.currentMessage;
+        $scope.reset();
 
         // comments is expected to be a list.
         message.comments = message.comments.split('\n');
@@ -176,19 +172,22 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
 
         Message.save({msgid: message.msgid}, message); //, function (res) {}
 
-        delete $scope.currentMessage;
         $scope.loading = false;
         $rootScope.flash('Messages saved!', 'success');
     };
 
-    $scope.change = function (message) {
-        // TODO: There _has_ to be a better way of doing this.
-        // Investigate scope.$watch.
-        console.log($scope.currentMessage);
-        console.log($scope.messageOriginal);
-        $scope.dirty = $scope.currentMessage != $scope.messageOriginal;
-        console.log($scope.dirty);
+    $scope.isChanged = function () {
+        return !angular.equals($scope.currentMessage, $scope.messageOriginal);
     };
+
+    $scope.scrollListDown = function () {
+        var elem = $('ul.messagesCol');
+        var scrollTo = elem.scrollTop() + elem.height();
+        elem.animate({scrollTop: scrollTo}, 'fast');
+
+    };
+
+    $scope.reset();
 };
 
 dragomanApp.controller.CatalogFormController = function ($scope, Catalog) {
@@ -254,6 +253,46 @@ dragomanApp.serviceFactory.Message = function ($resource, $routeParams) {
 
     return Message;
 };
+
+// dragomanApp.directive.scroll = function () {
+//     return {
+//         restrict: 'A',
+//         replace: false,
+//         transclude: false,
+//         link: function(scope, element, attrs) {
+//             var target = $(attrs.scroll);
+//             var direction = attrs.direction;
+
+//             scope.scrollTo = 0;
+
+//             scope.$watch(scope.scrollTo, function (newVal, oldVal) {
+//                 console.log(scope.scrollTo);
+//                 target.animate({scrollTop: scope.scrollTo}, 'fast');
+//             }, true);
+
+//             $(element).on('click', function () {
+//                 switch (direction) {
+//                     case 'T':
+//                         scope.scrollTo = 0;
+//                         break;
+//                     case 'B':
+//                         // scope.scrollTo = elem.height();
+//                         // element.disabled = elem.scrollTop() == elem.height();
+//                         break;
+//                     case 'U':
+//                         scope.scrollTo = target.scrollTop() - target.height();
+//                         break;
+//                     case 'D':
+//                         scope.scrollTo = target.scrollTop() + target.height();
+//                         break;
+//                 }
+
+//                 console.log(scope.scrollTo);
+//                 target.animate({scrollTop: scope.scrollTo}, 'fast');
+//             });
+//         }
+//     };
+// };
 
 angular.module('dragomanApp', ['ngResource']).
     config(['$routeProvider', '$locationProvider', '$httpProvider',
