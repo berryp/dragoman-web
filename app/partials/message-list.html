@@ -1,4 +1,4 @@
-<div class="messageList" ng-class="{loading: loading, editing: editing}">
+<div class="messageList" ng-class="{loading: loading, editing: editing}" ng-show="messages">
     <div ng-show="loading" class="loadingModal"></div>​
 
     <div class="row">
@@ -36,30 +36,43 @@
             <!-- <button ng-disabled="scrollAtBottom" class="span5 btn .btn-mini" scroll="ul.messagesCol" direction="D"><b class="icon-chevron-down"></b></button> -->
         </div>
         <div class="span6 editMessageCol">
-            <div class="alert alert-info editMessage" ng-show="currentMessage">
-                <form novalidate name="editMessageForm">
-                    <legend>Edit translation</legend>
-                    <label>English</label>
-                    <textarea class="span5" ng-readonly="!advanced_edit" ng-model="currentMessage.msgid" rows="2"></textarea>
-                    <textarea class="span5" ng-readonly="!advanced_edit" ng-show="currentMessage.msgid_plural" ng-model="currentMessage.msgid_plural" rows="2" ng-change="change(currentMessage)"></textarea>
-                    <br /><br />
-                    <label>{{language.name}}</label>
-                    <textarea class="span5" ng-model="currentMessage.msgstr[0]" rows="2"></textarea>
-                    <textarea class="span5" ng-show="currentMessage.msgstr[1]" ng-model="currentMessage.msgstr[1]" rows="2"></textarea>
-                    <hr />
-                    <label>References</label>
-                    <ul class="unstyled" ng-repeat="reference in currentMessage.references">
-                        <li><code>{{reference}}</code></li>
-                    </ul>
-                    <label>Comments</label>
-                    <textarea class="span5" ng-model="currentMessage.comments" rows="2"></textarea>
-                    <br /><br />
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="currentMessage.fuzzy"> Fuzzy
-                    </label>
-                    <hr />
-                    <button class="btn btn-info" type="submit" ng-disabled="!isChanged()" ng-click="update()">Save</button>
-                    <a ng-click="cancelEdit();">Cancel</a>
+            <div class="well editMessage">
+                <h3>Message Editor</h3>
+                <div ng-hide="currentMessage">
+                    <dl class="dl-horizontal">
+                        <dt>Messages</dt>
+                        <dd>{{counts.messages}}</dd>
+                        <dt ng-class="{'text-error': counts.untranslated > 0}">Untranslated</dt>
+                        <dd ng-class="{'text-error': counts.untranslated > 0}">{{counts.untranslated}}</dd>
+                        <dt ng-class="{'text-error': counts.fuzzy > 0}">Fuzzy</dt>
+                        <dd ng-class="{'text-error': counts.fuzzy > 0}">{{counts.fuzzy}}</dd>
+                    </dl>
+                </div>
+                <div class="editMessageContent" ng-show="currentMessage">
+                    <form novalidate name="editMessageForm">
+                        <!-- <legend>Edit translation</legend> -->
+                        <label>English</label>
+                        <textarea class="span5" ng-readonly="!advanced_edit" ng-model="currentMessage.msgid" rows="2"></textarea>
+                        <textarea class="span5" ng-readonly="!advanced_edit" ng-show="currentMessage.msgid_plural" ng-model="currentMessage.msgid_plural" rows="2" ng-change="change(currentMessage)"></textarea>
+                        <br /><br />
+                        <label class="text-warning">{{language.name}}</label>
+                        <textarea class="span5" ng-model="currentMessage.msgstr[0]" rows="2"></textarea>
+                        <textarea class="span5" ng-show="currentMessage.msgstr[1]" ng-model="currentMessage.msgstr[1]" rows="2"></textarea>
+                        <hr />
+                        <label>References</label>
+                        <ul class="unstyled" ng-repeat="reference in currentMessage.references">
+                            <li><code>{{reference}}</code></li>
+                        </ul>
+                        <label>Comments</label>
+                        <textarea class="span5" ng-model="currentMessage.comments" rows="2"></textarea>
+                        <br /><br />
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="currentMessage.fuzzy"> Fuzzy
+                        </label>
+                        <hr />
+                        <button class="btn btn-info" type="submit" ng-disabled="!isChanged()" ng-click="update()">Save</button>
+                        <a ng-click="cancelEdit();">Cancel</a>
+                    </form>
                 </div>
             </div>
         </div>

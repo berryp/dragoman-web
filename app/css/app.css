@@ -17453,12 +17453,28 @@ body {
 .catalogs .nav-stacked a button {
   float: right;
 }
+.messageList .editMessage {
+  height: 550px;
+}
+.messageList .editMessage h3 {
+  line-height: 25px;
+  margin-bottom: 20px;
+}
 .messageList .messagesCol {
-  height: 500px;
+  margin-top: 30px;
+  height: 520px;
   overflow: scroll;
 }
 .messageList .messagesCol hr {
   margin: 10px 0;
+}
+.messageList .messagesCol li {
+  cursor: pointer;
+}
+.messageList .messagesCol .inactive,
+.messageList .messagesCol .inactive .text-info,
+.messageList .messagesCol .inactive .text-warning {
+  color: #ccc;
 }
 .filterButtons {
   margin-right: 30px;
@@ -17468,14 +17484,6 @@ body {
   color: #999;
 }
 .extra-muted {
-  color: #ccc;
-}
-.messagesCol li {
-  cursor: pointer;
-}
-.messagesCol .inactive,
-.messagesCol .inactive .text-info,
-.messagesCol .inactive .text-warning {
   color: #ccc;
 }
 .span0_25 {

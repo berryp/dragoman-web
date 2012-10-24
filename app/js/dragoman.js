@@ -9,10 +9,13 @@ var dragomanApp = {
 };
 
 dragomanApp.controller.CatalogListCtrl = function($scope, $routeParams, Catalog) {
-
+    $scope.view = 'application';
 };
 
-dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routeParams, $location, $filter, Catalog, Message) {
+dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routeParams, $location, $filter, $q, Catalog, Message) {
+    $scope.hasMessages = false;
+    $scope.view = '';
+
     Catalog.get({catalogId: $routeParams.catalogId}, function (catalog) {
         $scope.messageStates = [[0, 'All'], [1, 'Untranslated'], [2, 'Fuzzy']];
 
@@ -22,9 +25,22 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
 
             $scope.loading = true;
             $scope.messagesState = 0; // All
-            $scope.messages = Message.query(function () {
+
+            Message.query(function (messages) {
+                $scope.messages = messages;
+
+                // $scope.loading = false;
+                $scope.counts = {
+                    messages: $scope.messages.length,
+                    untranslated: $scope.untranslatedCount(),
+                    fuzzy: $scope.fuzzyCount()
+                };
+
+                $scope.view = 'catalog';
                 $scope.loading = false;
             });
+        } else {
+            $scope.view = 'application';
         }
 
         $scope.catalog = catalog;
@@ -54,6 +70,43 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
     $scope.setMessagesState = function (stateId) {
         delete $scope.currentMessage;
         $scope.messagesState = stateId;
+    };
+
+    $scope.untranslatedCount = function () {
+        var msgLen = $scope.messages.length;
+        var untranslated = 0;
+
+        for (var i = 0; i < msgLen; i++) {
+            var message = $scope.messages[i];
+            var messageUntranslated = false;
+
+            messageUntranslated = message.msgstr[0] === '';
+
+            if (messageUntranslated) {
+                if (message.msgid_plural && (message.msgstr.length === 1 || message.msgstr[1] === '')) {
+                    messageUntranslated = true;
+                }
+            }
+
+            if (messageUntranslated) {
+                untranslated += 1;
+            }
+        }
+
+        return untranslated;
+    };
+
+    $scope.fuzzyCount = function () {
+        var msgLen = $scope.messages.length;
+        var fuzzyCount = 0;
+
+        for (var i = 0; i < msgLen; i++) {
+            if ($scope.messages[i].fuzzy) {
+                fuzzyCount += 1;
+            }
+        }
+
+        return fuzzyCount;
     };
 
     $scope.filterByMessageState = function (message) {

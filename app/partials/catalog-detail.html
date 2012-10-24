@@ -7,7 +7,7 @@
 </div>
 
 <div class="row">
-    <div class="span12">
+    <div class="span12" ng-cloak>
 
         <div class="tabbable">
             <ul class="nav nav-tabs">
@@ -20,7 +20,7 @@
         </div>
 
         <div class="tab-content">
-            <div class="tab-pane" ng-class="{active: !languageCode}">
+            <div class="tab-pane" ng-class="{active: view == 'application'}">
                 <div class="well">
                     <h4 ng-show="catalog.description != ''">{{catalog.description}}</h4>
                     <p>Total messages:</p>
@@ -30,7 +30,7 @@
                 <span>
             </div>
 
-            <div class="tab-pane" ng-class="{active: languageCode}">
+            <div class="tab-pane" ng-class="{active: view == 'catalog'}">
                 <form class="form-horizontal">
                     <!-- <legend>Messages</legend> -->
                         <div class="filterBar">

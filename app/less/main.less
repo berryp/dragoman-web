@@ -24,11 +24,27 @@ body {
 }
 
 .messageList {
+    .editMessage {
+        height: 550px;
+        h3 {
+            line-height: 25px;
+            margin-bottom: 20px;
+        }
+    }
     .messagesCol {
-        height: 500px;
+        margin-top: 30px;
+        height: 520px;
         overflow: scroll;
         hr {
             margin: 10px 0;
+        }
+        li {
+            cursor: pointer;
+        }
+        .inactive,
+        .inactive .text-info,
+        .inactive .text-warning {
+            color: #ccc;
         }
     }
 }
@@ -44,17 +60,6 @@ body {
 
 .extra-muted {
     color: #ccc;
-}
-
-.messagesCol {
-    li {
-        cursor: pointer;
-    }
-    .inactive,
-    .inactive .text-info,
-    .inactive .text-warning {
-        color: #ccc;
-    }
 }
 
 .span0_25 {
