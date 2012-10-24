@@ -294,12 +294,12 @@ dragomanApp.controller.ImportPofileFormController = function($scope, $location, 
 };
 
 dragomanApp.serviceFactory.Application = function ($resource) {
-    var Application = $resource('/applications/:applicationId', {});
+    var Application = $resource('/api/applications/:applicationId', {});
     return Application;
 };
 
 dragomanApp.serviceFactory.Catalog = function ($resource, $routeParams) {
-    var Message = $resource('/applications/:applicationId/:languageCode/:msgid', {
+    var Message = $resource('/api/applications/:applicationId/:languageCode/:msgid', {
         applicationId: $routeParams.applicationId, languageCode: $routeParams.languageCode
         });
     return Message;
