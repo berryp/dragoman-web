@@ -8,25 +8,24 @@ var dragomanApp = {
     controller: {}
 };
 
-dragomanApp.controller.CatalogListCtrl = function($scope, $routeParams, Catalog) {
+dragomanApp.controller.ApplicationListCtrl = function($scope, $routeParams, Application) {
     $scope.view = 'application';
 };
 
-dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routeParams, $location, $filter, $q, Catalog, Message) {
+dragomanApp.controller.ApplicationDetailCtrl = function($rootScope, $scope, $routeParams, $location, $filter, $q, Application, Catalog) {
     $scope.hasMessages = false;
     $scope.view = '';
-
-    Catalog.get({catalogId: $routeParams.catalogId}, function (catalog) {
+    Application.get({applicationId: $routeParams.applicationId}, function (application) {
         $scope.messageStates = [[0, 'All'], [1, 'Untranslated'], [2, 'Fuzzy']];
 
         if ($routeParams.languageCode) {
             $scope.languageCode = $routeParams.languageCode;
-            $scope.language = catalog.languages[$routeParams.languageCode];
+            $scope.language = application.languages[$routeParams.languageCode];
 
             $scope.loading = true;
             $scope.messagesState = 0; // All
 
-            Message.query(function (messages) {
+            Catalog.query(function (messages) {
                 $scope.messages = messages;
 
                 // $scope.loading = false;
@@ -43,14 +42,14 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
             $scope.view = 'application';
         }
 
-        $scope.catalog = catalog;
+        $scope.application = application;
         $scope.advanced_edit = false;
 
         var pofileLanguageList = LANGUAGE_LIST;
-        var catalogLangKeys = Object.keys($scope.catalog.languages);
+        var applicationLangKeys = Object.keys($scope.application.languages);
 
-        for (var i = 0; i < catalogLangKeys.length; i++) {
-            var key = catalogLangKeys[i];
+        for (var i = 0; i < applicationLangKeys.length; i++) {
+            var key = applicationLangKeys[i];
             if (pofileLanguageList[key] !== undefined) {
                 delete pofileLanguageList[key];
             }
@@ -174,11 +173,11 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
     };
 
     $scope.addLanguage = function () {
-        // $scope.catalog.languages[$scope.languagecode] = {
+        // $scope.application.languages[$scope.languagecode] = {
         //     code: $scope.languagecode,
         //     name: langList[$scope.languagecode]
         // };
-        // $scope.catalog.$save();
+        // $scope.application.$save();
     };
 
     $scope.editMessage = function (message) {
@@ -223,7 +222,7 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
             }
         }
 
-        Message.save({msgid: message.msgid}, message); //, function (res) {}
+        Catalog.save({msgid: message.msgid}, message); //, function (res) {}
 
         $scope.loading = false;
         $rootScope.flash('Messages saved!', 'success');
@@ -243,34 +242,34 @@ dragomanApp.controller.CatalogDetailCtrl = function($rootScope, $scope, $routePa
     $scope.reset();
 };
 
-dragomanApp.controller.CatalogFormController = function ($scope, Catalog) {
-    $scope.catalogId = '';
-    $scope.catalogName = '';
-    $scope.catalogDescription = '';
+dragomanApp.controller.ApplicationFormController = function ($scope, Application) {
+    $scope.applicationId = '';
+    $scope.applicationName = '';
+    $scope.applicationDescription = '';
 
-    $scope.saveCatalog = function () {
-        var newCatalog = new Catalog({
-            'id': $scope.catalogId,
-            'name': $scope.catalogName,
-            'description': $scope.catalogDescription
+    $scope.saveApplication = function () {
+        var newApplication = new Application({
+            'id': $scope.applicationId,
+            'name': $scope.applicationName,
+            'description': $scope.applicationDescription
         });
 
-        newCatalog.$save(function (catalog) {
-            $scope.catalogId = '';
-            $scope.catalogName = '';
-            $scope.catalogDescription = '';
+        newApplication.$save(function (application) {
+            $scope.applicationId = '';
+            $scope.applicationName = '';
+            $scope.applicationDescription = '';
         });
     };
 };
 
-dragomanApp.controller.ImportPofileFormController = function($scope, $location, $routeParams, $http, Catalog) {
+dragomanApp.controller.ImportPofileFormController = function($scope, $location, $routeParams, $http, Application) {
     $scope.change = function () {
         $('#importPofileModal').filedrop({
             fallback_id: 'uploadButton',
-            url: '/catalogs/' + $scope.catalogId + '/import',
+            url: '/applications/' + $scope.catalogId + '/import',
             paramname: 'pofile',
             data: {
-                catalogId: $scope.catalogId,
+                applicationId: $scope.applicationId,
                 languageCode: $scope.languageCode
             },
             maxfiles: 1,
@@ -282,7 +281,7 @@ dragomanApp.controller.ImportPofileFormController = function($scope, $location, 
                 $('.progress').hide();
                 $('#importPofileModalLabel').modal('hide');
                 $scope.$apply(function () {
-                    $location.path('/catalogs/' + $scope.catalogId + '/' + $scope.languageCode);
+                    $location.path('/applications/' + $scope.applicationId + '/' + $scope.languageCode);
                 });
 
             },
@@ -294,16 +293,15 @@ dragomanApp.controller.ImportPofileFormController = function($scope, $location, 
     };
 };
 
-dragomanApp.serviceFactory.Catalog = function ($resource) {
-    return $resource('/catalogs/:catalogId', {});
+dragomanApp.serviceFactory.Application = function ($resource) {
+    var Application = $resource('/applications/:applicationId', {});
+    return Application;
 };
 
-dragomanApp.serviceFactory.Message = function ($resource, $routeParams) {
-    var Message = $resource('/catalogs/:catalogId/messages/:languageCode/:msgid', {
-        catalogId: $routeParams.catalogId, languageCode: $routeParams.languageCode
-        }, {
-    });
-
+dragomanApp.serviceFactory.Catalog = function ($resource, $routeParams) {
+    var Message = $resource('/applications/:applicationId/:languageCode/:msgid', {
+        applicationId: $routeParams.applicationId, languageCode: $routeParams.languageCode
+        });
     return Message;
 };
 
@@ -353,23 +351,23 @@ angular.module('dragomanApp', ['ngResource']).
             routeProvider.
                 when('/', {
                     templateUrl: 'partials/home.html',
-                    controller: 'CatalogListCtrl'
+                    controller: 'ApplicationListCtrl'
                 }).
                 when('/login', {
                     templateUrl: 'partials/login.html',
                     controller: 'LoginCtrl'
                 }).
-                when('/catalogs', {
-                    templateUrl: 'partials/catalog-list.html',
-                    controller: 'CatalogListCtrl'
+                when('/applications', {
+                    templateUrl: 'partials/application-list.html',
+                    controller: 'ApplicationListCtrl'
                 }).
-                when('/catalogs/:catalogId', {
-                    templateUrl: 'partials/catalog-detail.html',
-                    controller: 'CatalogDetailCtrl'
+                when('/applications/:applicationId', {
+                    templateUrl: 'partials/application-detail.html',
+                    controller: 'ApplicationDetailCtrl'
                 }).
-                when('/catalogs/:catalogId/:languageCode', {
-                    templateUrl: 'partials/catalog-detail.html',
-                    controller: 'CatalogDetailCtrl'
+                when('/applications/:applicationId/:languageCode', {
+                    templateUrl: 'partials/application-detail.html',
+                    controller: 'ApplicationDetailCtrl'
                 }).
                 otherwise({redirectTo: '/'});
         }
@@ -377,8 +375,8 @@ angular.module('dragomanApp', ['ngResource']).
     factory(dragomanApp.serviceFactory).
     directive(dragomanApp.directive).
     controller(dragomanApp.controller).
-    run(['$rootScope', '$http', '$compile', 'Catalog',
-        function(scope, http, compile, Catalog) {
+    run(['$rootScope', '$http', '$compile', 'Application',
+        function(scope, http, compile, Application) {
             scope.flash = function (message, status) {
                 scope.$broadcast('flash', message, status);
             };
@@ -394,7 +392,7 @@ angular.module('dragomanApp', ['ngResource']).
                 $('.flash').append(html);
             });
 
-            scope.catalogs = Catalog.query();
+            scope.applications = Application.query();
         }
     ]);
 

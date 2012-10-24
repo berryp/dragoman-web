@@ -11,7 +11,7 @@
   <script src="lib/bootstrap.min.js"></script>
   <script src="js/dragoman.js"></script>
 </head>
-<body ng-controller="CatalogListCtrl">
+<body ng-controller="ApplicationListCtrl">
 
     <div class="wrapper">
       <header class="header">
@@ -31,21 +31,21 @@
                           </li>
 
                           <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catalogs <b class="caret"></b></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Applications <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                               <li>
-                                <a ng-href="/catalogs">
+                                <a ng-href="/applications">
                                   <b class="icon-list"></b> All
                                 </a>
                               </li>
-                              <li ng-repeat="catalog in catalogs">
-                                <a href="#/catalogs/{{catalog.id}}">
-                                  <b class="icon-edit"></b> {{catalog.name}}
+                              <li ng-repeat="application in applications">
+                                <a href="#/applications/{{application.id}}">
+                                  <b class="icon-edit"></b> {{application.name}}
                                 </a>
                               </li>
                               <li class="divider"></li>
                               <li>
-                                <a data-target="#newCatalogModal" show-modal role="button" data-toggle="modal">
+                                <a data-target="#newApplicationModal" show-modal role="button" data-toggle="modal">
                                   <b class="icon-plus-sign"></b> Create new...
                                 </a>
                               </li>
@@ -63,7 +63,7 @@
           <div ng-view></div>
       </div>
 
-      <div ng-include="'partials/new-catalog-modal.html'"></div>
+      <div ng-include="'partials/new-application-modal.html'"></div>
   </div>
 
 </body>

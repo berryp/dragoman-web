@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Applications <small>{{application.name}}</small></h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12" ng-cloak>
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li ng-class="{active: languageCode == null}"><a ng-href="/applications/{{application.id}}">Overview</a></li>
+                <li ng-class="{active: code == languageCode}" ng-repeat="(code, language) in application.languages">
+                    <a href="#/applications/{{application.id}}/{{code}}">{{language.name}}</a>
+                </li>
+                <li><a data-target="#importPofileModal" show-modal role="button" data-toggle="modal"><i class="icon-plus"></i></a>
+            </ul>
+        </div>
+
+        <div class="tab-content">
+            <div class="tab-pane" ng-class="{active: view == 'application'}">
+                <div class="well">
+                    <h4 ng-show="application.description != ''">{{application.description}}</h4>
+                    <p>Total messages:</p>
+                    <p>Untranslated:</p>
+                    <p>Fuzzy:</p>
+                </div>
+                <span>
+            </div>
+
+            <div class="tab-pane" ng-class="{active: view == 'catalog'}">
+                <form class="form-horizontal">
+                    <!-- <legend>Messages</legend> -->
+                        <div class="filterBar">
+                            <div class="pull-left">
+                                <div class="btn-group filterButtons" data-toggle="buttons-radio">
+                                    <button ng-repeat="state in messageStates" type="button" ng-class="{active: messagesState == state[0]}" ng-disabled="editing" ng-click="setMessagesState(state[0])" class="btn">{{state[1]}}</button>
+                                </div>
+                            </div>
+                            <div class="form-search pull-right">
+                                <div class="input-append">
+                                    <input type="text" class="span2 search-query" ng-disabled="editing" placeholder="Search" ng-change="clearEdit()" ng-model="searchMsgStr">
+                                    <button type="submit" ng-disabled="!searchMsgStr || editing" class="btn" ng-click="clearSearch()"><b class="icon-remove"></b></button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    <div ng-include="'partials/message-list.html'"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-cloak ng-include="'partials/new-catalog-modal.html'"></div>
+<div ng-cloak ng-include="'partials/import-pofile-modal.html'"></div>

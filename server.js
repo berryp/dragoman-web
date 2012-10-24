@@ -49,14 +49,14 @@ app.get('/', function (req, res) {
   res.send(indexTemplate);
 });
 
-app.get('/catalogs', function (req, res) {
+app.get('/applications', function (req, res) {
   // List the catalogs.
   catalogProvider.findAll(function (error, docs) {
     res.json(docs);
   });
 });
 
-app.post('/catalogs', function (req, res) {
+app.post('/applications', function (req, res) {
   // Create or save a new catalog.
   var catalog = {
     'id': req.body.id,
@@ -72,44 +72,43 @@ app.post('/catalogs', function (req, res) {
   });
 });
 
-app.get('/catalogs/:catalogId', function (req, res) {
-  catalogProvider.findOne({id: req.params.catalogId}, function (error, catalog) {
+app.get('/applications/:applicationId', function (req, res) {
+  catalogProvider.findOne({id: req.params.applicationId}, function (error, catalog) {
     res.send(catalog);
   });
 });
 
-app.post('/catalogs/:catalogId/import', function (req, res) {
+app.post('/applications/:applicationId/import', function (req, res) {
   po.load(req.files.pofile.path, function (_po) {
-    var catalogId = req.body.catalogId;
+    var applicationId = req.body.applicationId;
     var languageCode = req.body.languageCode;
 
-    messageProvider.save(catalogId, languageCode, _po.items, function (error, messages) {
+    messageProvider.save(applicationId, languageCode, _po.items, function (error, messages) {
       res.send(messages);
     });
   });
 });
 
-app.get('/catalogs/:catalogId/messages/:languageCode', function (req, res) {
+app.get('/applications/:applicationId/:languageCode', function (req, res) {
   console.log(req.path, req.params);
-  messageProvider.findAll(req.params.catalogId, req.params.languageCode,
+  messageProvider.findAll(req.params.applicationId, req.params.languageCode,
     function (error, messages) {
       res.send(messages);
     }
   );
 });
 
-app.get('/catalogs/:catalogId/messages/:languageCode/:msgid', function (req, res) {
-  console.log(req.path, req.params);
-  messageProvider.findOne(req.params.catalogId, req.params.languageCode, {msgid: req.params.msgid},
+app.get('/applications/:applicationId/messages/:languageCode/:msgid', function (req, res) {
+  messageProvider.findOne(req.params.applicationId, req.params.languageCode, {msgid: req.params.msgid},
     function (error, message) {
       res.send(message);
     }
   );
 });
 
-app.post('/catalogs/:catalogId/messages/:languageCode/:msgid', function (req, res) {
+app.post('/applications/:applicationId/messages/:languageCode/:msgid', function (req, res) {
   console.log(req.path, req.params);
-  messageProvider.save(req.params.catalogId, req.params.languageCode, req.body, function (error, message) {
+  messageProvider.save(req.params.applicationId, req.params.languageCode, req.body, function (error, message) {
     res.send(message);
   });
 });
