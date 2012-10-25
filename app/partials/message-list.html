@@ -1,4 +1,4 @@
-<div class="messageList" ng-class="{loading: loading, editing: editing}" ng-show="messages">
+<div class="messageList" ng-class="{loading: loading, editing: editing}">
     <div ng-show="loading" class="loadingModal"></div>​
 
     <div class="row">
@@ -7,48 +7,34 @@
             <div class="clearfix"></div>
             <ul class="nav nav-pills nav-stacked messagesCol">
                 <li ng-repeat="message in messages | filter:filterByText | filter:filterByMessageState"
-                        ng-click="editMessage(message);" ng-class="messageStatusClass(message, 'active', 'inactive')">
-                    <div class="row">
-                        <div class="">
-                            <div class="span0_5">EN</div>
-                            <div class="span5">{{message.msgid}}</div>
-
-                            <div ng-show="message.msgid_plural">
-                                <div class="span0_5"></div>
-                                <div class="span5"><em>{{message.msgid_plural}}</em></a></div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div>
-                            <div class="span0_5 text-warning">{{languageCode.toUpperCase()}}</div>
-                            <div class="span5 text-warning">{{message.msgstr[0]}}</div>
-
-                            <div ng-show="message.msgid_plural">
-                                <div class="span0_5"></div>
-                                <div class="span5 text-warning"><em>{{message.msgstr[1]}}</em></a></div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    <hr />
+                        ng-class="messageStatusClass(message, 'active', 'inactive')">
+                    <a ng-click="editMessage(message);">
+                        <dl class="dl-horizontal">
+                            <dt>EN</dt>
+                            <dd>{{message.msgid}}</dd>
+                            <dt class="text-warning">{{languageCode.toUpperCase()}}</dt>
+                            <dd class="text-warning">{{message.msgstr[0]}}</dd>
+                        </dl>
+                    </a>
+                    <!--<hr ng-show="!$last" />-->
                 </li>
             </ul>
             <!-- <button ng-disabled="scrollAtBottom" class="span5 btn .btn-mini" scroll="ul.messagesCol" direction="D"><b class="icon-chevron-down"></b></button> -->
         </div>
         <div class="span6 editMessageCol">
-            <div class="well editMessage">
+            <div class="well editMessage" ng-show="currentMessage">
                 <h3>Message Editor</h3>
                 <div ng-hide="currentMessage">
                     <dl class="dl-horizontal">
                         <dt>Messages</dt>
-                        <dd>{{counts.messages}}</dd>
-                        <dt ng-class="{'text-error': counts.untranslated > 0}">Untranslated</dt>
-                        <dd ng-class="{'text-error': counts.untranslated > 0}">{{counts.untranslated}}</dd>
-                        <dt ng-class="{'text-error': counts.fuzzy > 0}">Fuzzy</dt>
-                        <dd ng-class="{'text-error': counts.fuzzy > 0}">{{counts.fuzzy}}</dd>
+                        <dd>{{messageStates.all.count}}</dd>
+                        <dt ng-class="{'text-error': messageStates.untranslated.count > 0}">Untranslated</dt>
+                        <dd ng-class="{'text-error': messageStates.untranslated.count > 0}">{{messageStates.untranslated.count}}</dd>
+                        <dt ng-class="{'text-error': messageStates.fuzzy.count > 0}">Fuzzy</dt>
+                        <dd ng-class="{'text-error': messageStates.fuzzy.count > 0}">{{messageStates.fuzzy.count}}</dd>
                     </dl>
                 </div>
-                <div class="editMessageContent" ng-show="currentMessage">
+                <div class="editMessageContent">
                     <form novalidate name="editMessageForm">
                         <!-- <legend>Edit translation</legend> -->
                         <label>English</label>

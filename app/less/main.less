@@ -31,20 +31,46 @@ body {
             margin-bottom: 20px;
         }
     }
-    .messagesCol {
+    ul.messagesCol {
         margin-top: 30px;
         height: 520px;
         overflow: scroll;
         hr {
-            margin: 10px 0;
+            margin: 10px 0 0 0;
         }
+        .active a {
+            background: #eee;
+            color: #000;
+        }
+
         li {
             cursor: pointer;
+            margin: 0 0 0 0;
+            a {
+                margin: 0 0 0 0;
+                padding: 5px 8px;
+            }
+            dl {
+                margin: 0 0 0 0;
+            }
+            .dl-horizontal {
+                dt {
+                    width: 40px;
+                    font-weight: normal;
+                    text-align: left;
+                }
+                dd {
+                    margin-left: 40px;
+                }
+            }
         }
         .inactive,
         .inactive .text-info,
         .inactive .text-warning {
             color: #ccc;
+            a {
+                color: #ccc;
+            }
         }
     }
 }

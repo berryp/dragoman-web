@@ -1,11 +1,20 @@
+var ArgumentParser = argparse = require('argparse').ArgumentParser;
 var express = require('express');
 var app = express();
 var fs = require('fs');
 var po = require('node-po');
-var config = require('./config').config;
+var Config = require('./config').Config;
 var mongoProvider = require('./mongodb-provider');
 
 var indexTemplate = fs.readFileSync(__dirname + '/app/index.html', 'utf8');
+
+var parser = new ArgumentParser();
+parser.addArgument(['-c', '--config']);
+parser.addArgument(['-p', '--port']);
+
+var args = parser.parseArgs();
+var config = new Config(args);
+
 
 // Shortcut function to avoid entering the config information
 // everytime you want to instanciate a provider.
@@ -23,14 +32,6 @@ var messageProvider = getProvider('MessageProvider');
 app.use(express.static(__dirname + '/app'));
 app.use(express.bodyParser()); app.use(express.methodOverride());
 app.use(express.cookieParser());
-app.use(express.session({ secret: "keyboard cat" }));
-// app.use(function(req, res, next){
-//   if (!isAuthenticated(req)) {
-//     console.log('401');
-//     res.statusCode = 401;
-//   }
-//   next();
-// });
 
 
 function authenticate(username, password, error, success) {
@@ -112,5 +113,6 @@ app.post('/api/applications/:applicationId/messages/:languageCode/:msgid', funct
 });
 
 // Start the app.
-app.listen(3000);
-console.log('Listening on port 3000');
+var port = args.port || 3000;
+app.listen(port);
+console.log('Listening on port', port);

@@ -36,14 +36,18 @@
                         <div class="filterBar">
                             <div class="pull-left">
                                 <div class="btn-group filterButtons" data-toggle="buttons-radio">
-                                    <button ng-repeat="state in messageStates" type="button" ng-class="{active: messagesState == state[0]}" ng-disabled="editing" ng-click="setMessagesState(state[0])" class="btn">{{state[1]}}</button>
+                                    <button ng-repeat="state in messageStateOrder" type="button" ng-class="{active: messageState == state}"
+                                            ng-disabled="editing || messageStates[state].count == 0" ng-click="setMessageState(state)" class="btn btn-info">
+                                        {{messageStates[state].label}}&nbsp;&nbsp;<small class="">({{messageStates[state].count}})</small>
+                                    </button>
                                 </div>
                             </div>
                             <div class="form-search pull-right">
-                                <div class="input-append">
+                                <div class="control-group info">
+                                <div class="input-append info">
                                     <input type="text" class="span2 search-query" ng-disabled="editing" placeholder="Search" ng-change="clearEdit()" ng-model="searchMsgStr">
-                                    <button type="submit" ng-disabled="!searchMsgStr || editing" class="btn" ng-click="clearSearch()"><b class="icon-remove"></b></button>
-                                </div>
+                                    <button type="submit" ng-disabled="!searchMsgStr || editing" class="btn btn-info" ng-click="clearSearch()"><b class="icon-remove"></b></button>
+                                </div></div>
                             </div>
                             <div class="clearfix"></div>
                         </div>

@@ -17460,20 +17460,45 @@ body {
   line-height: 25px;
   margin-bottom: 20px;
 }
-.messageList .messagesCol {
+.messageList ul.messagesCol {
   margin-top: 30px;
   height: 520px;
   overflow: scroll;
 }
-.messageList .messagesCol hr {
-  margin: 10px 0;
+.messageList ul.messagesCol hr {
+  margin: 10px 0 0 0;
 }
-.messageList .messagesCol li {
+.messageList ul.messagesCol .active a {
+  background: #eee;
+  color: #000;
+}
+.messageList ul.messagesCol li {
   cursor: pointer;
+  margin: 0 0 0 0;
 }
-.messageList .messagesCol .inactive,
-.messageList .messagesCol .inactive .text-info,
-.messageList .messagesCol .inactive .text-warning {
+.messageList ul.messagesCol li a {
+  margin: 0 0 0 0;
+  padding: 5px 8px;
+}
+.messageList ul.messagesCol li dl {
+  margin: 0 0 0 0;
+}
+.messageList ul.messagesCol li .dl-horizontal dt {
+  width: 40px;
+  font-weight: normal;
+  text-align: left;
+}
+.messageList ul.messagesCol li .dl-horizontal dd {
+  margin-left: 40px;
+}
+.messageList ul.messagesCol .inactive,
+.messageList ul.messagesCol .inactive .text-info,
+.messageList ul.messagesCol .inactive .text-warning {
+  color: #ccc;
+}
+.messageList ul.messagesCol .inactive a,
+.messageList ul.messagesCol .inactive .text-info a,
+.messageList ul.messagesCol .inactive .text-warning a {
   color: #ccc;
 }
 .filterButtons {

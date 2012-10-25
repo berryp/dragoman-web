@@ -13,27 +13,40 @@ dragomanApp.controller.ApplicationListCtrl = function($scope, $routeParams, Appl
 };
 
 dragomanApp.controller.ApplicationDetailCtrl = function($rootScope, $scope, $routeParams, $location, $filter, $q, Application, Catalog) {
+    $scope.reset = function () {
+        delete $scope.editing;
+        delete $scope.dirty;
+        delete $scope.messageOriginal;
+        delete $scope.currentMessage;
+    };
+
+    $scope.reset();
+
     $scope.hasMessages = false;
     $scope.view = '';
+
     Application.get({applicationId: $routeParams.applicationId}, function (application) {
-        $scope.messageStates = [[0, 'All'], [1, 'Untranslated'], [2, 'Fuzzy']];
+        $scope.messageStates = {
+            all: {label: "All", count: 0},
+            untranslated: {label: "Untranslated", count: 0},
+            fuzzy: {label: "Fuzzy", count: 0}
+        };
+        $scope.messageStateOrder = ['all', 'untranslated', 'fuzzy'];
 
         if ($routeParams.languageCode) {
             $scope.languageCode = $routeParams.languageCode;
             $scope.language = application.languages[$routeParams.languageCode];
 
             $scope.loading = true;
-            $scope.messagesState = 0; // All
+            $scope.messageState = 'all';
 
             Catalog.query(function (messages) {
                 $scope.messages = messages;
 
                 // $scope.loading = false;
-                $scope.counts = {
-                    messages: $scope.messages.length,
-                    untranslated: $scope.untranslatedCount(),
-                    fuzzy: $scope.fuzzyCount()
-                };
+                $scope.messageStates.all.count = $scope.messages.length;
+                $scope.messageStates.untranslated.count = $scope.untranslatedCount();
+                $scope.messageStates.fuzzy.count = $scope.fuzzyCount();
 
                 $scope.view = 'catalog';
                 $scope.loading = false;
@@ -59,16 +72,9 @@ dragomanApp.controller.ApplicationDetailCtrl = function($rootScope, $scope, $rou
         $scope.pofileLanguageCode = '';
     });
 
-    $scope.reset = function () {
-        delete $scope.editing;
-        delete $scope.dirty;
-        delete $scope.messageOriginal;
+    $scope.setMessageState = function (stateName) {
         delete $scope.currentMessage;
-    };
-
-    $scope.setMessagesState = function (stateId) {
-        delete $scope.currentMessage;
-        $scope.messagesState = stateId;
+        $scope.messageState = stateName; //$scope.messageStates[stateName];
     };
 
     $scope.untranslatedCount = function () {
@@ -111,14 +117,14 @@ dragomanApp.controller.ApplicationDetailCtrl = function($rootScope, $scope, $rou
     $scope.filterByMessageState = function (message) {
         var show = false;
 
-        switch ($scope.messagesState) {
-            case 0:
+        switch ($scope.messageState) {
+            case 'all':
                 show = true;
                 break;
-            case 1:
+            case 'untranslated':
                 show = message.msgstr[0] === '';
                 break;
-            case 1:
+            case 'fuzzy':
                 show = message.fuzzy !== undefined && message.fuzzy;
                 break;
         }
