@@ -1,6 +1,5 @@
 .hg*
 requirements.txt
-config.js
 node_modules
 *.log
 *sublime-*
