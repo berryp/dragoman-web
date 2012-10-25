@@ -11,7 +11,7 @@
                     <a ng-click="editMessage(message);">
                         <dl class="dl-horizontal">
                             <dt>EN</dt>
-                            <dd>{{message.msgid}}</dd>
+                            <dd ng-class="{'text-error': hasMissingTranslations(message) || message.fuzzy}">{{message.msgid}}</dd>
                             <dt class="text-warning">{{languageCode.toUpperCase()}}</dt>
                             <dd class="text-warning">{{message.msgstr[0]}}</dd>
                         </dl>

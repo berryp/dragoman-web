@@ -1,1 +1,1 @@
-web: node server.js -p $PORT -c $APP_SETTINGS_YAML
+web: node server.js -p $PORT

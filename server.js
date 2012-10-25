@@ -9,8 +9,8 @@ var mongoProvider = require('./mongodb-provider');
 var indexTemplate = fs.readFileSync(__dirname + '/app/index.html', 'utf8');
 
 var parser = new ArgumentParser();
-parser.addArgument(['-c', '--config']);
 parser.addArgument(['-p', '--port']);
+parser.addArgument(['-c', '--config']);
 
 var args = parser.parseArgs();
 var config = new Config(args);

@@ -3,7 +3,7 @@ var yaml = require('js-yaml');
 var config = {};
 
 // Defaults for local development.
-var config_file = process.envAPP_SETTINGS_YAML || './devel.yaml';
+var config_file = process.env.APP_SETTINGS_YAML || './devel.yaml';
 
 var Config = function (args) {
     if (args.config && fs.existsSync(args.config)) {

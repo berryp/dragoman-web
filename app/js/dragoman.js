@@ -77,23 +77,26 @@ dragomanApp.controller.ApplicationDetailCtrl = function($rootScope, $scope, $rou
         $scope.messageState = stateName; //$scope.messageStates[stateName];
     };
 
+    $scope.hasMissingTranslations = function(message) {
+        var messageUntranslated = false;
+
+        messageUntranslated = message.msgstr[0] === '';
+
+        if (messageUntranslated) {
+            if (message.msgid_plural && (message.msgstr.length === 1 || message.msgstr[1] === '')) {
+                messageUntranslated = true;
+            }
+        }
+
+        return messageUntranslated;
+    };
+
     $scope.untranslatedCount = function () {
         var msgLen = $scope.messages.length;
         var untranslated = 0;
 
         for (var i = 0; i < msgLen; i++) {
-            var message = $scope.messages[i];
-            var messageUntranslated = false;
-
-            messageUntranslated = message.msgstr[0] === '';
-
-            if (messageUntranslated) {
-                if (message.msgid_plural && (message.msgstr.length === 1 || message.msgstr[1] === '')) {
-                    messageUntranslated = true;
-                }
-            }
-
-            if (messageUntranslated) {
+            if ($scope.hasMissingTranslations($scope.messages[i])) {
                 untranslated += 1;
             }
         }
